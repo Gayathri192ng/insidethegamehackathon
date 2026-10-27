@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MatchVerse AI — Hero Banner (Dark, Full Replica)</title>
+<style>
+  :root{
+    --bg:#0a0f1f; --panel:#111a33; --panel2:#0d1530; --border:#1f2a4a;
+    --purple:#7c5cff; --purple2:#9b7bff; --green:#22c55e; --blue:#3b82f6; --violet:#a855f7;
+    --red:#ef4444; --teal:#10b981; --text:#e8ecfb; --muted:#8893b8; --muted2:#aab2d6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{width:100%;height:100%;font-family:'Segoe UI',Arial,sans-serif;overflow:hidden;background:var(--bg);}
+  #scaler{position:absolute;top:0;left:0;width:1600px;height:1180px;transform-origin:top left;}
+  .page{position:relative;width:1600px;height:1180px;background:var(--bg);color:var(--text);}
+
+  /* top bar */
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 36px;border-bottom:1px solid var(--border);}
+  .brand{display:flex;align-items:center;gap:12px;}
+  .logo-dot{width:15px;height:15px;border-radius:50%;background:radial-gradient(circle at 30% 30%, var(--purple2), var(--purple));box-shadow:0 0 14px rgba(124,92,255,0.7);}
+  .brand-text b{font-size:17px;letter-spacing:0.4px;}
+  .brand-text small{display:block;color:var(--muted);font-size:10px;margin-top:2px;}
+  .navpills{display:flex;gap:6px;}
+  .pill{padding:8px 16px;border-radius:7px;font-size:12px;font-weight:600;color:var(--muted);}
+  .pill.active{background:var(--purple);color:#fff;}
+  .demo-badge{display:flex;align-items:center;gap:7px;border:1px solid var(--teal);color:var(--teal);
+    padding:5px 13px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:0.5px;}
+  .demo-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);}
+
+  /* score bar */
+  .scorebar{display:flex;align-items:center;justify-content:center;gap:24px;padding:10px 0;background:var(--panel2);border-bottom:1px solid var(--border);}
+  .team{font-weight:700;font-size:14px;}
+  .score-num{font-size:22px;font-weight:800;}
+  .clockbox{text-align:center;}
+  .clockbox .time{font-size:13px;font-weight:700;}
+  .clockbox .live{display:block;color:var(--red);font-size:9px;font-weight:800;letter-spacing:1px;margin-top:1px;}
+
+  /* main grid */
+  .maingrid{display:grid;grid-template-columns:200px 1fr 260px;gap:16px;padding:16px 24px;}
+  .col-left, .col-right{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px;}
+  .moment{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:7px;margin-bottom:6px;font-size:11px;color:var(--muted2);}
+  .moment b{font-size:12px;color:var(--text);}
+  .moment.active{background:var(--purple);}
+  .moment.active b, .moment.active span{color:#fff;}
+  .sec-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:0.5px;margin:12px 0 6px;}
+  .dropdown{width:100%;background:#0d1530;border:1px solid var(--border);color:var(--text);border-radius:6px;padding:7px 8px;font-size:12px;}
+  .btn-cinematic{width:100%;margin-top:10px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:10px;font-size:12px;font-weight:700;}
+  .steps{margin-top:14px;font-size:11px;color:#8fb8ff;line-height:1.8;}
+
+  /* center video panel */
+  .videopanel{position:relative;border-radius:10px;overflow:hidden;height:300px;
+    background:linear-gradient(135deg,#0f3d22,#145c33 45%,#1c7a45 100%);border:1px solid var(--border);}
+  .pitch-lines{position:absolute;inset:0;background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 80px);}
+  .overlay-topleft{position:absolute;top:14px;left:14px;background:rgba(10,15,31,0.75);padding:10px 14px;border-radius:8px;}
+  .overlay-topleft b{font-size:13px;display:block;}
+  .overlay-topleft span{font-size:11px;color:var(--muted);}
+  .overlay-topright{position:absolute;top:14px;right:14px;max-width:260px;text-align:right;}
+  .overlay-topright p{font-size:11px;color:#cfd8f5;margin-bottom:6px;}
+  .confidence-pill{display:inline-block;background:rgba(34,197,94,0.15);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;}
+  .playbtn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;
+    background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;}
+  .scrubwrap{position:absolute;bottom:10px;left:14px;right:14px;}
+  .scrub{height:4px;background:rgba(255,255,255,0.25);border-radius:4px;overflow:hidden;margin-bottom:4px;}
+  .scrub i{display:block;height:100%;width:45%;background:var(--purple2);}
+  .scrubwrap small{color:#dfe5fb;font-size:10px;}
+
+  .action-rows{margin-top:10px;display:flex;flex-direction:column;gap:7px;}
+  .action-row{background:var(--panel);border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-size:12px;color:#c9b8ff;}
+  .ask-bar{margin-top:10px;display:flex;gap:8px;}
+  .ask-bar input{flex:1;background:#0d1530;border:1px solid var(--border);border-radius:7px;padding:9px 12px;color:var(--text);font-size:12px;}
+  .ask-send{width:34px;border:none;border-radius:7px;background:var(--purple);color:#fff;font-weight:700;}
+
+  /* right copilot */
+  .copilot-title{color:var(--purple2);font-size:13px;font-weight:700;margin-bottom:10px;}
+  .copilot-q{display:block;width:100%;text-align:left;background:#0d1530;border:1px solid var(--border);color:#c9b8ff;
+    border-radius:7px;padding:8px 10px;font-size:11px;margin-bottom:7px;}
+
+  /* alternate realities */
+  .alt-section{padding:6px 24px 0;}
+  .alt-head{display:flex;align-items:center;justify-content:space-between;}
+  .alt-head h3{font-size:16px;}
+  .alt-head p{color:var(--muted);font-size:11px;margin-top:2px;}
+  .filters{display:flex;gap:6px;}
+  .filter{padding:6px 12px;border-radius:14px;font-size:10px;font-weight:700;color:var(--muted);border:1px solid var(--border);}
+  .filter.active{background:var(--purple);color:#fff;border-color:var(--purple);}
+  .alt-cards{display:flex;gap:14px;margin-top:12px;}
+  .alt-card{flex:1;background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+  .alt-thumb{height:70px;position:relative;background:linear-gradient(135deg,#123,#1c3a5e);}
+  .alt-thumb .tag{position:absolute;top:6px;left:8px;font-size:9px;font-weight:800;padding:3px 7px;border-radius:5px;color:#fff;}
+  .alt-thumb.green .tag{background:var(--green);} .alt-thumb.blue .tag{background:var(--blue);} .alt-thumb.violet .tag{background:var(--violet);}
+  .alt-thumb .play{position:absolute;bottom:6px;right:8px;color:#fff;font-size:12px;}
+  .alt-body{padding:10px 12px;}
+  .alt-body b{font-size:12px;display:block;}
+  .alt-body span{font-size:10px;color:var(--muted);}
+
+  /* hero */
+  .hero{text-align:center;padding:30px 40px 6px;}
+  .hero h1{font-size:30px;font-weight:800;margin-bottom:8px;}
+  .hero p{color:var(--muted);font-size:13px;max-width:700px;margin:0 auto;}
+  .cards-row{display:flex;gap:16px;padding:20px 60px 0;}
+  .card{flex:1;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px;border-left:4px solid var(--green);}
+  .card.blue{border-left-color:var(--blue);} .card.violet{border-left-color:var(--violet);}
+  .card .tag2{font-size:10px;font-weight:800;letter-spacing:0.5px;color:var(--muted);}
+  .card h2{font-size:17px;margin:6px 0 10px;}
+  .card .score{font-size:26px;font-weight:800;}
+  .card .prob{color:var(--muted);font-size:11px;margin-top:8px;}
+  .card.green .score{color:var(--green);} .card.blue .score{color:var(--blue);} .card.violet .score{color:var(--violet);}
+  .footer-note{text-align:center;color:var(--muted);font-size:10px;margin-top:16px;padding-bottom:16px;}
+</style>
+</head>
+<body>
+<div id="scaler">
+<div class="page">
+
+  <div class="topbar">
+    <div class="brand">
+      <span class="logo-dot"></span>
+      <div class="brand-text"><b>MATCHVERSE AI</b><small>Every Match Has Multiple Realities</small></div>
+    </div>
+    <div class="navpills">
+      <div class="pill active">Multiverse</div>
+      <div class="pill">RefSight Evidence</div>
+      <div class="pill">Match Story</div>
+      <div class="pill">Integrity</div>
+    </div>
+    <div class="demo-badge"><span class="demo-dot"></span>SYNTHETIC DEMO</div>
+  </div>
+
+  <div class="scorebar">
+    <div class="team">North City</div><div class="score-num">1</div>
+    <div class="clockbox"><span class="time">78:14</span><span class="live">● LIVE</span></div>
+    <div class="score-num">1</div><div class="team">Red Borough</div>
+  </div>
+
+  <div class="maingrid">
+    <div class="col-left">
+      <div class="moment"><b>78:14</b><span>Goal review</span></div>
+      <div class="moment"><b>62:08</b><span>Penalty review</span></div>
+      <div class="moment"><b>45:31</b><span>Goal validation</span></div>
+      <div class="moment active"><b>23:10 · CARD REVIEW</b><span>Checking foul severity…</span></div>
+      <div class="sec-label">AUDIENCE</div>
+      <select class="dropdown"><option>Broadcaster</option></select>
+      <button class="btn-cinematic">▶ Play cinematic review</button>
+      <div class="steps">Understand the decision.<br>Explore the alternatives.<br>Trust the outcome.</div>
+    </div>
+
+    <div>
+      <div class="videopanel">
+        <div class="pitch-lines"></div>
+        <div class="overlay-topleft"><b>23:10 · CARD REVIEW</b><span>Checking foul severity…</span></div>
+        <div class="overlay-topright">
+          <p>alternate scenarios based on tactical, positional and historical patterns.</p>
+          <span class="confidence-pill">96.7% Confidence in analysis</span>
+        </div>
+        <div class="playbtn">▶</div>
+        <div class="scrubwrap"><div class="scrub"><i></i></div><small>0:06 / 0:12</small></div>
+      </div>
+      <div class="action-rows">
+        <div class="action-row">⤷ Show me the alternate realities</div>
+        <div class="action-row">？ Why was this a big moment?</div>
+        <div class="action-row">⚙ What were the tactical options?</div>
+        <div class="action-row">📈 How did this impact win probability?</div>
+      </div>
+      <div class="ask-bar"><input placeholder="Ask a question…"><button class="ask-send">➜</button></div>
+    </div>
+
+    <div class="col-right">
+      <div class="copilot-title">✦ MATCHVERSE COPILOT</div>
+      <button class="copilot-q">Why this decision?</button>
+      <button class="copilot-q">What if it changed?</button>
+      <button class="copilot-q">Show exact evidence</button>
+      <div class="ask-bar" style="margin-top:50px;"><input placeholder="Ask MatchVerse…"><button class="ask-send">➜</button></div>
+    </div>
+  </div>
+
+  <div class="alt-section">
+    <div class="alt-head">
+      <div>
+        <h3>✦ Alternate Realities</h3>
+        <p>Explore how a single moment can create different outcomes.</p>
+      </div>
+      <div class="filters">
+        <div class="filter active">All Realities</div>
+        <div class="filter">Goals</div>
+        <div class="filter">Tactics</div>
+        <div class="filter">Lineups</div>
+        <div class="filter">Key Moments</div>
+      </div>
+    </div>
+    <div class="alt-cards">
+      <div class="alt-card">
+        <div class="alt-thumb green"><span class="tag">REALITY A</span><span class="play">▶</span></div>
+        <div class="alt-body"><b>The Goal</b><span>Haaland scores</span></div>
+      </div>
+      <div class="alt-card">
+        <div class="alt-thumb blue"><span class="tag">REALITY B</span><span class="play">▶</span></div>
+        <div class="alt-body"><b>The Pass</b><span>Haaland passes to Foden</span></div>
+      </div>
+      <div class="alt-card">
+        <div class="alt-thumb violet"><span class="tag">REALITY C</span><span class="play">▶</span></div>
+        <div class="alt-body"><b>The Substitution</b><span>Earlier tactical change</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>One moment. Multiple credible futures.</h1>
+    <p>MatchVerse combines the RefSight evidence engine with counterfactual match simulation.</p>
+  </div>
+  <div class="cards-row">
+    <div class="card green"><div class="tag2">REALITY A · OBSERVED</div><h2>Goal disallowed</h2><div class="score">1–1</div><div class="prob">Draw probability 41%</div></div>
+    <div class="card blue"><div class="tag2">REALITY B · IF AWARDED</div><h2>Goal awarded</h2><div class="score">2–1</div><div class="prob">Home win probability 62%</div></div>
+    <div class="card violet"><div class="tag2">REALITY C · TACTICAL RESPONSE</div><h2>Earlier substitution</h2><div class="score">3–1</div><div class="prob">Home win probability 71%</div></div>
+  </div>
+  <div class="footer-note">Synthetic demonstration. Counterfactuals are scenario estimates, not forecasts.</div>
+
+</div>
+</div>
+<script>
+  function scaleToFit(){
+    const s = Math.min(window.innerWidth/1600, window.innerHeight/1180);
+    const scaler = document.getElementById('scaler');
+    scaler.style.transform = 'scale(' + s + ')';
+    scaler.style.left = ((window.innerWidth - 1600*s)/2) + 'px';
+    scaler.style.top = ((window.innerHeight - 1180*s)/2) + 'px';
+  }
+  window.addEventListener('resize', scaleToFit);
+  window.addEventListener('load', scaleToFit);
+</script>
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MatchVerse AI — 2 Minute Demo Video</title>
+<style>
+  :root{
+    --navy:#0b2e59;
+    --blue:#1e5ac8;
+    --accent:#3b82f6;
+    --light:#e8f1fd;
+    --gray:#4b5563;
+    --white:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',Arial,sans-serif;background:#0b2e59;}
+  #scaler{position:absolute;top:0;left:0;width:1280px;height:720px;transform-origin:top left;}
+  #stage{position:relative;width:1280px;height:720px;}
+  .scene{
+    position:absolute;inset:0;
+    opacity:0;
+    transition:opacity .6s ease;
+    display:flex;flex-direction:column;
+    background:var(--white);
+  }
+  .scene.active{opacity:1;z-index:2;}
+  .header{
+    background:var(--navy);
+    color:var(--white);
+    padding:22px 40px 18px;
+  }
+  .kicker{color:var(--accent);font-weight:700;font-size:14px;letter-spacing:1px;}
+  .title{font-size:30px;font-weight:700;margin-top:4px;}
+  .body{flex:1;padding:28px 40px;position:relative;}
+  .card{
+    background:var(--light);border-left:6px solid var(--blue);
+    border-radius:4px;padding:18px 20px;margin-bottom:14px;
+  }
+  .card h3{color:var(--navy);font-size:19px;margin-bottom:6px;}
+  .card p{color:var(--gray);font-size:14px;line-height:1.4;}
+  .cols{display:flex;gap:18px;height:100%;}
+  .col{flex:1;}
+  ul{list-style:none;}
+  li{font-size:16px;color:var(--gray);margin-bottom:12px;padding-left:22px;position:relative;}
+  li::before{content:"●";color:var(--blue);position:absolute;left:0;}
+  .big{font-size:48px;font-weight:700;color:var(--navy);}
+  .accent{color:var(--accent);}
+  .footer{
+    padding:8px 40px;font-size:11px;color:#8a97a8;display:flex;justify-content:space-between;
+    border-top:1px solid #eef2f7;
+  }
+  /* progress bar */
+  #progress-wrap{position:absolute;bottom:0;left:0;width:100%;height:6px;background:#dbe6f8;z-index:10;}
+  #progress{height:100%;width:0;background:var(--accent);}
+  /* Title scene */
+  #scene-title{justify-content:center;align-items:flex-start;padding-left:70px;background:var(--white);}
+  #scene-title .stripe{position:absolute;left:0;top:0;width:14px;height:100%;background:var(--blue);}
+  #scene-title .glow{position:absolute;bottom:0;left:0;width:100%;height:150px;background:var(--light);}
+  .emoji{font-size:26px;color:var(--blue);font-weight:700;}
+  .headline{font-size:50px;font-weight:800;color:var(--navy);margin:14px 0 10px;}
+  .sub{font-size:22px;color:var(--gray);font-style:italic;}
+  .tag{font-size:17px;color:var(--blue);font-weight:700;margin-top:30px;}
+
+  /* flow steps */
+  .flow{display:flex;align-items:center;gap:10px;margin-top:40px;}
+  .step{background:var(--blue);color:#fff;border-radius:6px;padding:20px 10px;text-align:center;font-weight:700;font-size:14px;flex:1;}
+  .step:nth-child(odd){background:var(--navy);}
+  .arrow{color:var(--blue);font-size:22px;}
+
+  .score-row{display:flex;gap:16px;margin:18px 0;}
+  .score-pill{background:var(--navy);color:#fff;padding:12px 18px;border-radius:6px;font-weight:700;font-size:15px;flex:1;text-align:center;}
+  .outcomes{display:flex;gap:16px;}
+  .outcome{background:var(--light);border-radius:6px;padding:18px;flex:1;}
+  .outcome .tagline{color:var(--blue);font-size:12px;font-weight:700;}
+  .outcome h3{color:var(--navy);font-size:17px;margin:6px 0;}
+  .outcome .score{font-size:30px;font-weight:800;color:var(--blue);}
+  .outcome p{font-size:12px;color:var(--gray);margin-top:6px;}
+
+  #scene-closing{background:var(--navy);align-items:flex-start;justify-content:center;padding-left:70px;}
+  #scene-closing .headline{color:#fff;}
+  #scene-closing .sub{color:var(--accent);font-style:normal;font-weight:700;}
+  #scene-closing .disclaimer{color:#b9c6da;font-size:12px;font-style:italic;margin-top:40px;max-width:900px;}
+
+  .caption-bar{
+    position:absolute;bottom:18px;left:120px;right:120px;
+    background:rgba(0,0,0,0.82);color:#fff;font-size:17px;font-weight:600;
+    padding:10px 20px;border-radius:4px;text-align:center;line-height:1.35;
+    text-shadow:0 1px 2px rgba(0,0,0,0.6);
+    font-family:'Segoe UI',Arial,sans-serif;
+  }
+  .cc-badge{
+    position:absolute;top:16px;left:24px;background:#000;color:#fff;font-size:11px;font-weight:800;
+    padding:3px 7px;border-radius:3px;letter-spacing:1px;z-index:20;border:1px solid #fff;
+  }
+  .timer{position:absolute;top:16px;right:24px;color:#8a97a8;font-size:12px;z-index:20;}
+</style>
+</head>
+<body>
+<div id="scaler">
+<div id="stage">
+
+  <!-- Scene 1: Title 0-12s -->
+  <div class="scene active" id="scene-title">
+    <div class="stripe"></div>
+    <div class="glow"></div>
+    <div class="emoji">🧠 MATCHVERSE AI</div>
+    <div class="headline">Every Match Has<br>Multiple Realities</div>
+    <div class="sub">Explain the decision. Explore the alternative. Measure the impact.</div>
+    <div class="tag">Powered by RefSight Decision Intelligence</div>
+    <div class="caption-bar">Welcome to MatchVerse AI — where every contested match decision gets a clear, data-backed story.</div>
+  </div>
+
+  <!-- Scene 2: Problem 12-27s -->
+  <div class="scene" id="scene-problem">
+    <div class="header"><div class="kicker">THE PROBLEM</div><div class="title">One Decision. A Thousand Opinions.</div></div>
+    <div class="body">
+      <ul>
+        <li>Contested officiating decisions dominate the conversation — with no shared source of truth.</li>
+        <li>Fans, analysts, and broadcasters all ask "what if?", but rarely get a data-backed answer.</li>
+        <li>Existing systems explain the rule, not the ripple effect on the result.</li>
+      </ul>
+      <div class="card" style="margin-top:26px;">
+        <h3>Why it matters</h3>
+        <p>A single offside call can swing a match from a draw to a win — yet audiences never see that probability shift explained clearly.</p>
+      </div>
+    </div>
+    <div class="caption-bar">Officiating decisions spark endless debate, but nobody shows fans what each alternative would have meant.</div>
+  </div>
+
+  <!-- Scene 3: Solution 27-45s -->
+  <div class="scene" id="scene-solution">
+    <div class="header"><div class="kicker">THE SOLUTION</div><div class="title">MatchVerse AI — Decision Intelligence for Every Match</div></div>
+    <div class="body">
+      <div class="cols">
+        <div class="col card"><h3>Observed Outcome</h3><p>What actually happened — the real decision, confidence score, and evidence margin.</p></div>
+        <div class="col card"><h3>Alternative Outcome</h3><p>What would have happened if the call went the other way — modeled win/draw probabilities.</p></div>
+        <div class="col card"><h3>Tactical Alternative</h3><p>How a different in-match decision could have reshaped the final result.</p></div>
+      </div>
+    </div>
+    <div class="caption-bar">MatchVerse AI models the observed call alongside realistic alternative outcomes, side by side.</div>
+  </div>
+
+  <!-- Scene 4: Key Features 45-63s -->
+  <div class="scene" id="scene-features">
+    <div class="header"><div class="kicker">KEY FEATURES</div><div class="title">Four Modules, One Decision Intelligence Flow</div></div>
+    <div class="body">
+      <ul>
+        <li><b>MatchVerse</b> — live key-moment timeline: goal, penalty, card, validation reviews.</li>
+        <li><b>Decision Intelligence</b> — RefSight evidence breakdown with confidence and margin.</li>
+        <li><b>Reality Compare</b> — side-by-side scenario modeling of outcomes.</li>
+        <li><b>Match Story</b> — audience- and language-aware narrative generation.</li>
+        <li><b>Integrity</b> — evidence-tamper simulation and baseline restore.</li>
+      </ul>
+    </div>
+    <div class="caption-bar">Five connected modules take you from raw evidence to an audience-ready story.</div>
+  </div>
+
+  <!-- Scene 5: How it works 63-78s -->
+  <div class="scene" id="scene-flow">
+    <div class="header"><div class="kicker">HOW IT WORKS</div><div class="title">From Raw Evidence to Audience-Ready Insight</div></div>
+    <div class="body">
+      <div class="flow">
+        <div class="step">Select Key<br>Moment</div><div class="arrow">➜</div>
+        <div class="step">RefSight<br>Evidence</div><div class="arrow">➜</div>
+        <div class="step">Model<br>Alternatives</div><div class="arrow">➜</div>
+        <div class="step">Measure<br>Impact</div><div class="arrow">➜</div>
+        <div class="step">Tell the<br>Story</div>
+      </div>
+      <p style="margin-top:40px;font-size:15px;color:var(--gray);font-style:italic;">Every stage stays transparent and explainable — never a black box.</p>
+    </div>
+    <div class="caption-bar">Each decision flows through five transparent stages, never a black box.</div>
+  </div>
+
+  <!-- Scene 6: Tech Stack & How It's Built 78-92s -->
+  <div class="scene" id="scene-techstack">
+    <div class="header"><div class="kicker">TECH STACK &amp; HOW IT'S BUILT</div><div class="title">Today's Demo vs. the Production Roadmap</div></div>
+    <div class="body">
+      <div class="cols">
+        <div class="col card">
+          <h3>Today — Demo Build</h3>
+          <p>Pure HTML5, CSS3, vanilla JavaScript — zero frameworks, served as static files.<br><br>Decisions, confidence scores and outcomes are scripted demo data illustrating the product experience.</p>
+        </div>
+        <div class="col card">
+          <h3>Roadmap — Production AI</h3>
+          <p>Computer-vision event detection, ML win-probability models, and an NLG service for Match Story — connected via a real API layer.</p>
+        </div>
+      </div>
+    </div>
+    <div class="caption-bar">Today this runs as a scripted HTML/CSS/JS demo; real computer-vision and ML models are the next step.</div>
+  </div>
+
+  <!-- Scene 7: Demo highlight 92-108s -->
+  <div class="scene" id="scene-demo">
+    <div class="header"><div class="kicker">LIVE DEMO HIGHLIGHT</div><div class="title">78:14 · Goal Review — North City 1 : 1 Red Borough</div></div>
+    <div class="body">
+      <div class="score-row">
+        <div class="score-pill">DECISION: OFFSIDE</div>
+        <div class="score-pill" style="background:var(--accent);">CONFIDENCE: 97.4%</div>
+        <div class="score-pill">MARGIN: 12 cm</div>
+      </div>
+      <div class="outcomes">
+        <div class="outcome"><div class="tagline">OBSERVED</div><h3>Goal disallowed</h3><div class="score">1–1</div><p>Draw probability 41%</p></div>
+        <div class="outcome"><div class="tagline">ALTERNATIVE</div><h3>Goal awarded</h3><div class="score">2–1</div><p>Home-win probability 62%</p></div>
+        <div class="outcome"><div class="tagline">TACTICAL ALT.</div><h3>Earlier substitution</h3><div class="score">3–1</div><p>Home-win probability 71%</p></div>
+      </div>
+    </div>
+    <div class="caption-bar">Here's the live demo: a 97.4%-confidence offside call, with every alternative outcome modeled instantly.</div>
+  </div>
+
+  <!-- Scene 7: Audience & Impact 98-112s -->
+  <div class="scene" id="scene-audience">
+    <div class="header"><div class="kicker">AUDIENCE &amp; IMPACT</div><div class="title">One Engine, Every Audience</div></div>
+    <div class="body">
+      <div class="cols" style="margin-bottom:20px;">
+        <div class="col card"><h3>Casual Fan</h3><p>Simple, story-driven explanations of what the decision meant.</p></div>
+        <div class="col card"><h3>Analyst</h3><p>Deeper statistics, confidence scores, and scenario probabilities.</p></div>
+        <div class="col card"><h3>Broadcaster</h3><p>Ready-to-air narrative framing, multi-language support.</p></div>
+      </div>
+      <ul>
+        <li>Builds trust through transparency, not just enforcement.</li>
+        <li>Increases engagement with interactive, data-backed storytelling.</li>
+      </ul>
+    </div>
+    <div class="caption-bar">One engine adapts its story for casual fans, analysts, and broadcasters alike.</div>
+  </div>
+
+  <!-- Scene 8: Closing 112-120s -->
+  <div class="scene" id="scene-closing">
+    <div class="headline">MATCHVERSE AI</div>
+    <div class="sub">Explain decisions · Explore alternatives · Understand impact</div>
+    <div class="disclaimer">Probability changes are modelled estimates for decision exploration. Human review remains authoritative.</div>
+    <div class="caption-bar" style="background:rgba(255,255,255,0.1);">Thank you — MatchVerse AI. Explain decisions, explore alternatives, understand impact.</div>
+  </div>
+
+  <div id="progress-wrap"><div id="progress"></div></div>
+  <div class="timer" id="timer">00:00 / 02:00</div>
+</div>
+</div>
+<button id="start-btn" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:50;
+  padding:18px 36px;font-size:20px;font-weight:700;color:#fff;background:#1e5ac8;border:none;border-radius:40px;
+  cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,0.3);font-family:'Segoe UI',Arial,sans-serif;">▶ Start</button>
+<button id="pause-btn" style="display:none;position:fixed;bottom:20px;right:20px;z-index:50;
+  padding:10px 20px;font-size:14px;font-weight:700;color:#fff;background:#0b2e59;border:none;border-radius:24px;
+  cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.3);font-family:'Segoe UI',Arial,sans-serif;">⏸ Pause</button>
+
+<script>
+  // exact 2-minute (120s) timeline, in milliseconds, with matching narration text
+  const timeline = [
+    {id:'scene-title', duration:10000,
+      narration:"Welcome to MatchVerse AI, where every contested match decision gets a clear, data backed story."},
+    {id:'scene-problem', duration:13000,
+      narration:"Officiating decisions spark endless debate, but nobody shows fans what each alternative would have meant."},
+    {id:'scene-solution', duration:16000,
+      narration:"MatchVerse AI models the observed call alongside realistic alternative outcomes, side by side."},
+    {id:'scene-features', duration:16000,
+      narration:"Five connected modules take you from raw evidence to an audience ready story: MatchVerse, Decision Intelligence, Reality Compare, Match Story, and Integrity."},
+    {id:'scene-flow', duration:13000,
+      narration:"Each decision flows through five transparent stages, select the moment, review the evidence, model alternatives, measure impact, and tell the story. Never a black box."},
+    {id:'scene-techstack', duration:14000,
+      narration:"Today this runs as a lightweight HTML, CSS and JavaScript demo. The decision data and AI outcomes are scripted for this walkthrough, with real computer vision and probability models on the roadmap."},
+    {id:'scene-demo', duration:16000,
+      narration:"Here's the live demo: a ninety seven point four percent confidence offside call. Observed outcome, goal disallowed, one one. Alternative, goal awarded, two one. Tactical alternative, an earlier substitution leading to three one."},
+    {id:'scene-audience', duration:14000,
+      narration:"One engine adapts its story for casual fans, analysts, and broadcasters alike, building trust through transparency and driving deeper engagement."},
+    {id:'scene-closing', duration:8000,
+      narration:"Thank you. MatchVerse AI. Explain decisions, explore alternatives, understand impact."},
+  ];
+  const total = timeline.reduce((a,s)=>a+s.duration,0); // 120000ms
+  let elapsed = 0;
+  const progressEl = document.getElementById('progress');
+  const timerEl = document.getElementById('timer');
+
+  function fmt(ms){
+    const s = Math.floor(ms/1000);
+    const m = Math.floor(s/60);
+    const r = s%60;
+    return String(m).padStart(2,'0')+':'+String(r).padStart(2,'0');
+  }
+
+  function showScene(index){
+    document.querySelectorAll('.scene').forEach(el=>el.classList.remove('active'));
+    const target = document.getElementById(timeline[index].id);
+    if(target) target.classList.add('active');
+    speakScene(timeline[index].narration);
+  }
+
+  // --- Voiceover via Web Speech API, preferring a LOCAL (offline) Indian-English voice ---
+  // Network/"online" voices (localService === false) commonly fail with 'synthesis-failed'
+  // when there's no internet or Microsoft's speech service is unreachable.
+  let chosenVoice = null;
+  let voiceAttemptIndex = 0;
+  let rankedVoices = [];
+  function pickVoice(){
+    const all = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+    const local = all.filter(v => v.localService !== false);
+    const pool = local.length ? local : all; // fall back to online voices only if no local ones exist
+    rankedVoices = [
+      ...pool.filter(v => v.lang === 'en-IN'),
+      ...pool.filter(v => /india/i.test(v.name) && v.lang !== 'en-IN'),
+      ...pool.filter(v => v.lang && v.lang.startsWith('en') && !/india/i.test(v.name) && v.lang !== 'en-IN'),
+      ...pool,
+    ].filter((v, i, arr) => v && arr.indexOf(v) === i); // de-dupe, preserve priority order
+    voiceAttemptIndex = 0;
+    chosenVoice = rankedVoices[0] || null;
+    const ind = document.getElementById('voice-indicator');
+    if(ind) ind.textContent = chosenVoice
+      ? ('🔊 Voice: ' + chosenVoice.name + ' (' + chosenVoice.lang + ')' + (chosenVoice.localService === false ? ' — online' : ' — offline'))
+      : '❌ No speech voice available on this system';
+  }
+  if(window.speechSynthesis){
+    pickVoice();
+    window.speechSynthesis.onvoiceschanged = pickVoice;
+  }
+  let lastSpokenText = '';
+  let speakQueue = [];
+  let speakToken = 0;
+  function splitIntoChunks(text){
+    // Split into sentences/clauses so desktop SAPI voices don't silently truncate long utterances.
+    return text.match(/[^.!?,;:]+[.!?,;:]*/g).map(s => s.trim()).filter(Boolean);
+  }
+  function speakScene(text){
+    const ind = document.getElementById('voice-indicator');
+    if(!window.speechSynthesis){
+      if(ind) ind.textContent = '❌ Speech synthesis not supported in this browser.';
+      return;
+    }
+    if(!text) return;
+    lastSpokenText = text;
+    window.speechSynthesis.cancel();
+    speakQueue = splitIntoChunks(text);
+    const myToken = ++speakToken;
+    speakNextChunk(myToken, ind);
+  }
+  function speakNextChunk(myToken, ind){
+    if(myToken !== speakToken) return; // a newer scene has started; abandon this queue
+    if(isPaused) return; // resumed later by the Pause/Play button
+    const chunk = speakQueue.shift();
+    if(!chunk){
+      if(ind) ind.textContent = '🔊 Voice ready: ' + (chosenVoice ? chosenVoice.name : 'default');
+      return;
+    }
+    const utter = new SpeechSynthesisUtterance(chunk);
+    if(chosenVoice) utter.voice = chosenVoice;
+    utter.lang = (chosenVoice && chosenVoice.lang) || 'en-US';
+    utter.rate = 1.0;
+    utter.pitch = 1.0;
+    utter.volume = 1.0;
+    let advanced = false;
+    const advanceOnce = () => {
+      if(advanced) return;
+      advanced = true;
+      speakNextChunk(myToken, ind);
+    };
+    utter.onstart = () => { if(ind) ind.textContent = '🔊 Speaking… ' + (chosenVoice ? chosenVoice.name : 'default voice'); };
+    utter.onerror = (e) => {
+      advanced = true; // don't also fire the safety timeout below
+      // Retry with the next ranked voice on failure (e.g. a network voice that's unreachable)
+      voiceAttemptIndex++;
+      if(voiceAttemptIndex < rankedVoices.length){
+        chosenVoice = rankedVoices[voiceAttemptIndex];
+        if(ind) ind.textContent = '⚠️ "' + e.error + '" — retrying with ' + chosenVoice.name + '…';
+        speakScene(lastSpokenText);
+      } else {
+        if(ind) ind.textContent = '❌ Speech error: ' + e.error + ' (no more voices to try — check system volume/output device)';
+      }
+    };
+    utter.onend = advanceOnce;
+    window.speechSynthesis.speak(utter);
+    // Some browsers/voices never fire onend reliably — force advance after a generous
+    // estimate (words ÷ 150wpm) so the queue never silently stalls.
+    const estimateMs = Math.max(1200, (chunk.split(/\s+/).length / 150) * 60000 + 800);
+    setTimeout(advanceOnce, estimateMs);
+  }
+  // Chrome (not Edge) silently stops speaking after ~15s unless nudged; Edge doesn't need
+  // this and the pause/resume calls actually truncate its speech, so scope this to Chrome only.
+  const isChromeNotEdge = /Chrome\//.test(navigator.userAgent) && !/Edg\//.test(navigator.userAgent);
+  if(isChromeNotEdge){
+    setInterval(() => { if(window.speechSynthesis && window.speechSynthesis.speaking) { window.speechSynthesis.pause(); window.speechSynthesis.resume(); } }, 4000);
+  }
+
+  // --- Pausable, elapsed-time-driven scene scheduler (no fixed setTimeouts to cancel) ---
+  let isPaused = false;
+  let isRunning = false;
+  let timelineStart = 0;
+  let pauseAccum = 0;
+  let pauseStartedAt = 0;
+  let currentSceneIndex = -1;
+  const cumulative = [];
+  (function buildCumulative(){
+    let acc = 0;
+    for(const s of timeline){ cumulative.push(acc); acc += s.duration; }
+  })();
+
+  function sceneIndexForElapsed(ms){
+    let idx = 0;
+    for(let i = cumulative.length - 1; i >= 0; i--){
+      if(ms >= cumulative[i]){ idx = i; break; }
+    }
+    return idx;
+  }
+
+  function tick(){
+    if(!isRunning) return;
+    if(!isPaused){
+      elapsed = Date.now() - timelineStart - pauseAccum;
+      progressEl.style.width = Math.min(100, (elapsed/total)*100) + '%';
+      timerEl.textContent = fmt(Math.min(elapsed, total)) + ' / 02:00';
+      const idx = sceneIndexForElapsed(elapsed);
+      if(idx !== currentSceneIndex){
+        currentSceneIndex = idx;
+        showScene(idx);
+      }
+      if(elapsed >= total){
+        progressEl.style.width = '100%';
+        timerEl.textContent = '02:00 / 02:00';
+        isRunning = false;
+        return;
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function runTimeline(){
+    isRunning = true;
+    isPaused = false;
+    pauseAccum = 0;
+    currentSceneIndex = -1;
+    timelineStart = Date.now();
+    requestAnimationFrame(tick);
+  }
+
+  function togglePause(){
+    const btn = document.getElementById('pause-btn');
+    if(!isRunning) return;
+    if(!isPaused){
+      isPaused = true;
+      pauseStartedAt = Date.now();
+      if(window.speechSynthesis) window.speechSynthesis.pause();
+      if(btn) btn.textContent = '▶ Play';
+    } else {
+      isPaused = false;
+      pauseAccum += Date.now() - pauseStartedAt;
+      if(window.speechSynthesis) window.speechSynthesis.resume();
+      if(btn) btn.textContent = '⏸ Pause';
+      requestAnimationFrame(tick);
+    }
+  }
+
+  function scaleToFit(){
+    const s = Math.min(window.innerWidth/1280, window.innerHeight/720);
+    const scaler = document.getElementById('scaler');
+    scaler.style.transform = 'scale(' + s + ')';
+    scaler.style.left = ((window.innerWidth - 1280*s)/2) + 'px';
+    scaler.style.top = ((window.innerHeight - 720*s)/2) + 'px';
+  }
+  window.addEventListener('resize', scaleToFit);
+  window.addEventListener('load', scaleToFit);
+
+  document.getElementById('start-btn').addEventListener('click', function(){
+    this.remove();
+    pickVoice();
+    runTimeline();
+    document.getElementById('pause-btn').style.display = 'inline-block';
+  });
+  document.getElementById('pause-btn').addEventListener('click', togglePause);
+</script>
+</body>
+</html>

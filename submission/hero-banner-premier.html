@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MatchVerse AI — Hero Banner (Premier League Style)</title>
+<style>
+  :root{
+    --bg:#070b1a; --panel:#111a33; --panel2:#0d1530; --border:rgba(255,255,255,0.08);
+    --purple:#7c5cff; --purple2:#9b7bff; --green:#22c55e; --blue:#3b82f6; --red:#ef4444;
+    --text:#eef1fb; --muted:#8a93b8; --muted2:#b7bfe0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{width:100%;height:100%;font-family:'Segoe UI',Arial,sans-serif;overflow:hidden;background:var(--bg);}
+  #scaler{position:absolute;top:0;left:0;width:1600px;height:1020px;transform-origin:top left;}
+  .page{position:relative;width:1600px;height:1020px;color:var(--text);
+    background:
+      radial-gradient(900px 300px at 15% 0%, rgba(124,92,255,0.18), transparent 60%),
+      radial-gradient(900px 300px at 85% 0%, rgba(59,130,246,0.15), transparent 60%),
+      var(--bg);}
+
+  /* top bar */
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid var(--border);}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .pl-badge{width:30px;height:30px;border-radius:50%;background:conic-gradient(from 180deg,#7c5cff,#3b82f6,#22c55e,#7c5cff);}
+  .brand-text b{font-size:17px;}
+  .brand-text small{display:block;color:var(--muted);font-size:10px;margin-top:1px;}
+  .navitems{display:flex;gap:22px;font-size:13px;color:var(--muted);}
+  .navitems .active{color:#fff;font-weight:700;border-bottom:2px solid var(--purple);padding-bottom:4px;}
+  .topright{display:flex;align-items:center;gap:12px;}
+  .ask-input{background:#0d1530;border:1px solid var(--border);border-radius:18px;padding:7px 14px;font-size:11px;color:var(--muted);width:200px;}
+  .avatar{width:30px;height:30px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;}
+
+  /* league/score bar */
+  .leaguebar{display:flex;align-items:center;justify-content:space-between;padding:10px 32px;background:var(--panel2);border-bottom:1px solid var(--border);font-size:11px;color:var(--muted);}
+  .leaguebar .lg{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--text);}
+  .matchcenter{display:flex;align-items:center;gap:16px;}
+  .matchcenter b{font-size:14px;}
+  .matchcenter .dot{width:22px;height:22px;border-radius:50%;background:var(--blue);}
+  .matchcenter .dot.red{background:var(--red);}
+  .matchcenter .num{font-size:22px;font-weight:800;}
+  .matchcenter .clk{text-align:center;font-size:11px;}
+  .matchcenter .clk small{display:block;color:var(--red);font-weight:800;font-size:9px;}
+
+  .maingrid{display:grid;grid-template-columns:300px 1fr 300px;gap:14px;padding:14px 24px;}
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;}
+  .panel h4{font-size:13px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .ai-badge{background:var(--purple);color:#fff;font-size:8px;font-weight:800;padding:2px 6px;border-radius:4px;}
+  .copilot-msg{background:#0d1530;border-radius:8px;padding:10px;font-size:11px;color:var(--muted2);line-height:1.5;margin-bottom:10px;}
+  .action-btn{display:block;width:100%;text-align:left;background:#0d1530;border:1px solid var(--border);color:#c9b8ff;
+    border-radius:7px;padding:8px 10px;font-size:11px;margin-bottom:6px;}
+  .action-btn.active{background:var(--purple);color:#fff;}
+  .ask-bar2{display:flex;gap:6px;margin-top:8px;}
+  .ask-bar2 input{flex:1;background:#0d1530;border:1px solid var(--border);border-radius:7px;padding:8px 10px;color:var(--text);font-size:11px;}
+  .ask-send{width:30px;border:none;border-radius:7px;background:var(--purple);color:#fff;}
+
+  .insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;}
+  .insight{background:#0d1530;border-radius:8px;padding:8px;}
+  .insight b{font-size:16px;display:block;color:var(--purple2);}
+  .insight span{font-size:9px;color:var(--muted);}
+
+  .videopanel{position:relative;border-radius:10px;overflow:hidden;height:210px;
+    background:linear-gradient(135deg,#1c2a52,#0a1230 70%);border:1px solid var(--border);}
+  .stadium-lights{position:absolute;inset:0;background:radial-gradient(circle at 30% 20%, rgba(255,255,255,0.08), transparent 40%),
+    radial-gradient(circle at 70% 10%, rgba(255,255,255,0.06), transparent 35%);}
+  .expand{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.5);color:#fff;font-size:10px;padding:4px 8px;border-radius:5px;}
+  .scrubwrap2{position:absolute;bottom:8px;left:10px;right:10px;}
+  .scrub2{height:4px;background:rgba(255,255,255,0.25);border-radius:4px;overflow:hidden;margin-bottom:4px;}
+  .scrub2 i{display:block;height:100%;width:50%;background:var(--purple2);}
+  .scrubwrap2 small{color:#dfe5fb;font-size:10px;}
+
+  .split2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
+  .moment-card p{font-size:11px;color:var(--muted2);line-height:1.5;margin:6px 0 8px;}
+  .confidence-pill2{display:inline-block;background:rgba(34,197,94,0.15);color:var(--green);font-size:10px;font-weight:700;padding:4px 10px;border-radius:6px;}
+  .legend{display:flex;gap:10px;font-size:9px;color:var(--muted);margin-bottom:6px;}
+  .legend span{display:inline-flex;align-items:center;gap:4px;}
+  .legend i{width:7px;height:7px;border-radius:50%;}
+  .chart{height:70px;position:relative;background:linear-gradient(180deg,rgba(124,92,255,0.06),transparent);border-radius:6px;}
+  .chart .line{position:absolute;left:0;right:0;top:40%;height:2px;background:repeating-linear-gradient(90deg,#3b82f6 0 6px, transparent 6px 10px);}
+  .chart .line2{top:60%;background:repeating-linear-gradient(90deg,#ef4444 0 6px, transparent 6px 10px);}
+  .chart .marker{position:absolute;top:0;bottom:0;left:78%;width:1px;background:rgba(255,255,255,0.3);}
+
+  /* alternate realities */
+  .alt-section2{padding:10px 24px 0;}
+  .alt-head2{display:flex;align-items:center;justify-content:space-between;}
+  .alt-head2 h3{font-size:15px;}
+  .alt-head2 p{color:var(--muted);font-size:11px;margin-top:2px;}
+  .filters2{display:flex;gap:6px;}
+  .filter2{padding:6px 12px;border-radius:14px;font-size:10px;font-weight:700;color:var(--muted);border:1px solid var(--border);}
+  .filter2.active{background:var(--purple);color:#fff;border-color:var(--purple);}
+  .alt-cards2{display:flex;gap:14px;margin-top:10px;}
+  .alt-card2{flex:1;background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+  .thumb2{height:90px;position:relative;background:linear-gradient(135deg,#17305a,#0a1733);}
+  .thumb2 .tag2{position:absolute;top:7px;left:8px;font-size:9px;font-weight:800;padding:3px 7px;border-radius:5px;color:#fff;display:flex;align-items:center;gap:4px;}
+  .thumb2.green .tag2{background:var(--green);} .thumb2.blue .tag2{background:var(--blue);} .thumb2.violet .tag2{background:var(--purple);}
+  .thumb2 .play2{position:absolute;bottom:7px;right:9px;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;}
+  .alt-title{padding:8px 12px 0;}
+  .alt-title b{font-size:12px;display:block;}
+  .alt-title span{font-size:10px;color:var(--muted);}
+  .stat-row{display:flex;gap:8px;padding:8px 12px;}
+  .stat-box{flex:1;border-radius:7px;padding:6px 8px;text-align:center;}
+  .stat-box.green{background:rgba(34,197,94,0.15);color:var(--green);}
+  .stat-box.blue{background:rgba(59,130,246,0.15);color:var(--blue);}
+  .stat-box.violet{background:rgba(124,92,255,0.15);color:var(--purple2);}
+  .stat-box b{font-size:14px;display:block;}
+  .stat-box span{font-size:8px;color:inherit;opacity:0.85;}
+  .predicted{flex:1;background:#0d1530;border-radius:7px;padding:6px 8px;text-align:center;}
+  .predicted b{font-size:14px;display:block;color:#fff;}
+  .predicted span{font-size:8px;color:var(--muted);}
+  .impact-list{padding:0 12px 12px;font-size:10px;color:var(--muted2);line-height:1.7;}
+  .impact-list b{display:block;font-size:9px;color:var(--muted);margin-bottom:3px;}
+
+  /* timeline */
+  .timelinebar{display:flex;align-items:center;gap:14px;padding:12px 32px;margin:10px 24px 0;background:var(--panel);
+    border:1px solid var(--border);border-radius:10px;font-size:11px;color:var(--muted);}
+  .timeline-track{flex:1;position:relative;height:2px;background:rgba(255,255,255,0.15);}
+  .timeline-track .dot{position:absolute;top:50%;width:6px;height:6px;border-radius:50%;background:var(--muted);transform:translate(-50%,-50%);}
+  .timeline-track .dot.marker{width:12px;height:12px;background:var(--purple);box-shadow:0 0 0 4px rgba(124,92,255,0.3);}
+
+  /* footer */
+  .footerbar{display:flex;align-items:center;justify-content:space-between;padding:10px 32px;font-size:10px;color:var(--muted);}
+</style>
+</head>
+<body>
+<div id="scaler">
+<div class="page">
+
+  <div class="topbar">
+    <div class="brand">
+      <span class="pl-badge"></span>
+      <div class="brand-text"><b>MATCHVERSE AI</b><small>Every Match Has Multiple Realities</small></div>
+    </div>
+    <div class="navitems">
+      <span>Live</span><span class="active">Multiverse</span><span>Tactics</span><span>Players</span><span>Insights</span><span>Fan View</span>
+    </div>
+    <div class="topright">
+      <div class="ask-input">✦ Ask MatchVerse…</div>
+      <div class="avatar">GV</div>
+    </div>
+  </div>
+
+  <div class="leaguebar">
+    <div class="lg">🏆 Premier League</div>
+    <div class="matchcenter">
+      <b>Manchester City</b><span class="dot"></span><b style="font-size:22px;">1</b> - <b style="font-size:22px;">1</b>
+      <div class="clk">78:14<small>● Live</small></div>
+      <span class="dot red"></span><b>Arsenal</b>
+    </div>
+    <div>☁ Etihad Stadium, Manchester &nbsp; 🌡 12°C &nbsp; 👥 52,314</div>
+  </div>
+
+  <div class="maingrid">
+    <div class="panel">
+      <h4>🎨 MatchVerse Copilot <span class="ai-badge">AI</span></h4>
+      <div class="copilot-msg">This is a critical moment! Haaland has just missed a clear chance in the 78th minute. Based on our simulation, this moment could have changed the outcome in 3 different ways.<br><br>Would you like to explore the alternate realities?</div>
+      <button class="action-btn active">⊕ Show me the alternate realities</button>
+      <button class="action-btn">? Why was this a big moment?</button>
+      <button class="action-btn">⊕ What were the tactical options?</button>
+      <button class="action-btn">⊕ How did this impact win probability?</button>
+      <div class="ask-bar2"><input placeholder="Ask a question…"><button class="ask-send">➜</button></div>
+
+      <h4 style="margin-top:16px;">💡 Key Insights</h4>
+      <div class="insight-grid">
+        <div class="insight"><b>0.42</b><span>xG of this chance</span></div>
+        <div class="insight"><b>96.7%</b><span>Chance difficulty rating</span></div>
+        <div class="insight"><b>3</b><span>Alternate outcomes detected</span></div>
+        <div class="insight"><b>+34%</b><span>Attack momentum if converted</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="videopanel">
+        <div class="stadium-lights"></div>
+        <div class="expand">⤢ Expand</div>
+        <div class="scrubwrap2"><div class="scrub2"><i></i></div><small>0:06 / 0:12</small></div>
+      </div>
+      <div class="split2">
+        <div class="panel moment-card">
+          <h4>🎯 Why This Moment Matters</h4>
+          <p>Haaland's shot in the 78th minute had a 0.42 xG and could have increased City's win probability from 28% to 62%.</p>
+          <p>Our AI has identified 3 real alternate scenarios based on tactical, positional and historical patterns.</p>
+          <span class="confidence-pill2">96.7% Confidence in analysis</span>
+        </div>
+        <div class="panel">
+          <h4>📈 Live Win Probability</h4>
+          <div class="legend">
+            <span><i style="background:var(--blue);"></i>Man City 28%</span>
+            <span><i style="background:var(--muted);"></i>Draw 41%</span>
+            <span><i style="background:var(--red);"></i>Arsenal 31%</span>
+          </div>
+          <div class="chart"><div class="line"></div><div class="line line2"></div><div class="marker"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h4>🎯 Alternate Realities</h4>
+      <p style="font-size:11px;color:var(--muted);">Quick preview — full comparisons below.</p>
+    </div>
+  </div>
+
+  <div class="alt-section2">
+    <div class="alt-head2">
+      <div><h3>🎯 Alternate Realities</h3><p>Explore how a single moment can create different outcomes.</p></div>
+      <div class="filters2">
+        <div class="filter2 active">All Realities</div><div class="filter2">Goals</div><div class="filter2">Tactics</div><div class="filter2">Lineups</div><div class="filter2">Key Moments</div>
+      </div>
+    </div>
+    <div class="alt-cards2">
+      <div class="alt-card2">
+        <div class="thumb2 green"><span class="tag2">🏆 Reality A</span><span class="play2">▶</span></div>
+        <div class="alt-title"><b>The Goal</b><span>Haaland scores</span></div>
+        <div class="stat-row"><div class="stat-box green"><b>62%</b><span>Win Probability</span></div><div class="predicted"><b>2-1</b><span>Predicted Score</span></div></div>
+        <div class="impact-list"><b>Impact</b>✓ Increases City's momentum by 34%<br>✓ Arsenal likely to open up more<br>✓ Higher chance of 3+ goals (27%)</div>
+      </div>
+      <div class="alt-card2">
+        <div class="thumb2 blue"><span class="tag2">⇄ Reality B</span><span class="play2">▶</span></div>
+        <div class="alt-title"><b>The Pass</b><span>Haaland passes to Foden</span></div>
+        <div class="stat-row"><div class="stat-box blue"><b>48%</b><span>Win Probability</span></div><div class="predicted"><b>2-2</b><span>Predicted Score</span></div></div>
+        <div class="impact-list"><b>Impact</b>✓ Creates a higher quality chance (0.55 xG)<br>✓ Maintains possession control<br>✓ Leads to 6% higher chance of a draw</div>
+      </div>
+      <div class="alt-card2">
+        <div class="thumb2 violet"><span class="tag2">⇄ Reality C</span><span class="play2">▶</span></div>
+        <div class="alt-title"><b>The Substitution</b><span>Earlier tactical change</span></div>
+        <div class="stat-row"><div class="stat-box violet"><b>71%</b><span>Win Probability</span></div><div class="predicted"><b>3-1</b><span>Predicted Score</span></div></div>
+        <div class="impact-list"><b>Impact</b>✓ Brings on Doku 10 minutes earlier<br>✓ Increases attacking width by 28%<br>✓ Creates 3 additional scoring opportunities</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="timelinebar">
+    <span>⏱ Timeline</span>
+    <div class="timeline-track">
+      <div class="dot" style="left:5%;"></div>
+      <div class="dot" style="left:28%;"></div>
+      <div class="dot" style="left:50%;"></div>
+      <div class="dot marker" style="left:78%;"></div>
+      <div class="dot" style="left:95%;"></div>
+    </div>
+    <span>HT &nbsp; 78' &nbsp; FT</span>
+  </div>
+
+  <div class="footerbar">
+    <span>Powered by Google · Microsoft Azure</span>
+    <span>Football's Next Chapter. Powered by AI &nbsp; 🏆 Premier League</span>
+  </div>
+
+</div>
+</div>
+<script>
+  function scaleToFit(){
+    const s = Math.min(window.innerWidth/1600, window.innerHeight/1020);
+    const scaler = document.getElementById('scaler');
+    scaler.style.transform = 'scale(' + s + ')';
+    scaler.style.left = ((window.innerWidth - 1600*s)/2) + 'px';
+    scaler.style.top = ((window.innerHeight - 1020*s)/2) + 'px';
+  }
+  window.addEventListener('resize', scaleToFit);
+  window.addEventListener('load', scaleToFit);
+</script>
+</body>
+</html>
